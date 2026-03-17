@@ -6,6 +6,8 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 // Resultado genérico para manejar éxito / error sin excepciones en la UI
 sealed class AuthResult<out T> {
@@ -23,16 +25,22 @@ class AuthRepository {
         role: UserRole
     ): AuthResult<Unit> = runCatching {
 
+        val roleString = role.name.lowercase() // "client" | "manitas" | "admin"
+
         // 1. Crear cuenta en Supabase Auth
         supabaseClient.auth.signUpWith(Email) {
             this.email = email
             this.password = password
+            this.data = buildJsonObject {
+                put("full_name", fullName)
+                put("role", roleString)
+            }
         }
 
         val userId = supabaseClient.auth.currentUserOrNull()?.id
             ?: return AuthResult.Error("No se pudo obtener el usuario tras el registro")
 
-        val roleString = role.name.lowercase() // "client" | "manitas" | "admin"
+
 
         // 2. Upsert perfil — el trigger ya lo crea vacío, aquí lo completamos
         supabaseClient.postgrest["profiles"].upsert(
@@ -59,6 +67,7 @@ class AuthRepository {
         supabaseClient.auth.signInWith(Email) {
             this.email = email
             this.password = password
+
         }
 
         val userId = supabaseClient.auth.currentUserOrNull()?.id

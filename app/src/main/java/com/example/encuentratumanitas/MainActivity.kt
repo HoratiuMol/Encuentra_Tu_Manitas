@@ -54,7 +54,13 @@ fun AppNavigation() {
             )
         }
         composable("dashboard") {
-            // DashboardScreen(navController)
+            ClientDashboardScreen(
+                onNavigateToAuth = {
+                    navController.navigate("auth") {
+                        popUpTo("dashboard") { inclusive = true }
+                    }
+                }
+            )
         }
         composable("admin") {
             // AdminScreen(navController)
