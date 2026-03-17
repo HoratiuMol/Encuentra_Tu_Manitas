@@ -36,6 +36,7 @@ private val MRedColor  = Color(0xFFDC2626)
 @Composable
 fun ManitasDashboardScreen(
     onNavigateToAuth: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     viewModel: ManitasDashboardViewModel = viewModel()
 ) {
     val uiState           by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,10 +94,12 @@ fun ManitasDashboardScreen(
 
             // ── Tarjeta Perfil ────────────────────────────────────────────
             Card(
+
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MCardWhite),
                 elevation = CardDefaults.cardElevation(2.dp)
+
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -144,6 +147,15 @@ fun ManitasDashboardScreen(
                             value = "${uiState.myProposals.count { it.status == "accepted" }}",
                             color = MAppAmber
                         )
+                        //divisor horizontal
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MBgGray)
+
+                        // En la tarjeta de perfil
+                        TextButton(onClick = onNavigateToProfile) {
+                            Icon(Icons.Default.Edit, null, modifier = Modifier.size(16.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text("Editar perfil")
+                        }
                     }
                 }
             }

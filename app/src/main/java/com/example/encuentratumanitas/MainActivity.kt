@@ -59,14 +59,34 @@ fun AppNavigation() {
                     navController.navigate("auth") {
                         popUpTo("dashboard") { inclusive = true }
                     }
-                }
+                },
+                onNavigateToProfile = { navController.navigate("profile") }
             )
         }
         composable("admin") {
             // AdminScreen(navController)
         }
         composable("manitas") {
-            // ManitasDashboardScreen(navController)
+            ManitasDashboardScreen(
+                onNavigateToAuth = {
+                    navController.navigate("auth") {
+                        popUpTo("manitas") { inclusive = true }
+                    }
+                },
+                onNavigateToProfile = { navController.navigate("profile") }
+            )
         }
+        composable("profile") {
+            ProfileScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onAccountDeleted = {
+                    navController.navigate("auth") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        
     }
 }

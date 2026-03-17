@@ -35,6 +35,7 @@ private val RedDelete = Color(0xFFDC2626)
 @Composable
 fun ClientDashboardScreen(
     onNavigateToAuth: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     viewModel: ClientDashboardViewModel = viewModel()
 ) {
     val uiState        by viewModel.uiState.collectAsStateWithLifecycle()
@@ -124,6 +125,16 @@ fun ClientDashboardScreen(
                             fontSize = 12.sp,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
+                    }
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = BgGray)
+                    TextButton(
+                        onClick = onNavigateToProfile,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Default.Edit, null, modifier = Modifier.size(16.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text("Editar perfil")
                     }
                 }
             }
